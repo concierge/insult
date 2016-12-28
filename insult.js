@@ -1,4 +1,4 @@
-var reddit = require.once(rootPathJoin('core/common/reddit.js')),
+var reddit = require.once('concierge/reddit'),
     results = [];
 
 exports.insult = function(callback, waitCallback) {
