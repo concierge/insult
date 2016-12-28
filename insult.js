@@ -1,4 +1,4 @@
-var reddit = require.once('concierge/reddit'),
+var reddit = require('concierge/reddit'),
     results = [];
 
 exports.insult = function(callback, waitCallback) {
