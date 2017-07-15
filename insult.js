@@ -1,43 +1,22 @@
-var reddit = require('concierge/reddit'),
-    results = [];
+const reddit = require('concierge/reddit');
+let results = [];
 
-exports.insult = function(callback, waitCallback) {
+const insult = async(api, thread) => {
     // If we have no stored insults, get some
-    if (results === undefined || results === null || results.length === 0) {
-		waitCallback();
-        reddit.reddit('insults', 200, function (err, data) {
-            if (!err) {
-                results = data;
-                exports.fuckNode(callback);
-            }
-            else {
-                callback(data);
-            }
-        });
+    if (!results || results.length === 0) {
+        results = await reddit('insults', 200);
     }
-    else {
-        exports.fuckNode(callback);
-    }
-};
 
-exports.fuckNode = function(callback) {
     // Get some random insult
-
-    var index = Math.floor(Math.random() * results.length),
-        title = results[index].data.title,
-        text = results[index].data.selftext;
+    const random = api.random(results),
+        title = random.data.title,
+        text = random.data.selftext;
 
     // Delete the insult, so we don't get it again
-    results.splice(index, 1);
-
-    callback(title + '\n' + text);
+    results.splice(results.indexOf(random), 1);
+    api.sendMessage(`${title}\n${text}`, thread);
 };
 
-exports.run = function(api, event) {
-    exports.insult(function(result) {
-        api.sendMessage(result, event.thread_id);
-    },
-	function() {
-		api.sendTyping(event.thread_id);
-	});
+exports.run = (api, event) => {
+    insult(api, event.thread_id);
 };

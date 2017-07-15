@@ -1,6 +1,6 @@
 ﻿{
   "name": "insult",
-  "version": 2.3,
+  "version": "3.0.0",
   "startup": "insult.js",
   "command": "insult",
   "help": [
